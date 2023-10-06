@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.7
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Tempo de geração: 07/11/2022 às 11:56
--- Versão do servidor: 10.4.24-MariaDB-1:10.4.24+maria~stretch
--- Versão do PHP: 7.2.34-28+0~20211119.67+debian9~1.gbpf24e81
+-- Host: localhost:3306
+-- Tempo de geração: 06-Out-2023 às 02:24
+-- Versão do servidor: 10.9.3-MariaDB
+-- versão do PHP: 8.2.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,27 +18,28 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `natsnote_natsofficesolutions_com`
+-- Banco de dados: `umentor`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `atendimento_bot`
+-- Estrutura da tabela `cadastros`
 --
 
-CREATE TABLE `atendimento_bot` (
-  `id_atend` int(11) NOT NULL,
-  `telefone` varchar(30) COLLATE utf8mb4_swedish_ci NOT NULL,
-  `mensagem` text COLLATE utf8mb4_swedish_ci NOT NULL,
-  `data` date NOT NULL DEFAULT current_timestamp(),
-  `id_empresa` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+CREATE TABLE `cadastros` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(200) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `dataadm` date NOT NULL,
+  `datahcad` datetime NOT NULL,
+  `datahupdt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `empresas`
+-- Estrutura da tabela `empresas`
 --
 
 CREATE TABLE `empresas` (
@@ -67,7 +67,7 @@ CREATE TABLE `empresas` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `perfil`
+-- Estrutura da tabela `perfil`
 --
 
 CREATE TABLE `perfil` (
@@ -76,12 +76,12 @@ CREATE TABLE `perfil` (
   `nomeperfil` varchar(50) NOT NULL,
   `descricao` varchar(300) NOT NULL,
   `status` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `projetos`
+-- Estrutura da tabela `projetos`
 --
 
 CREATE TABLE `projetos` (
@@ -100,7 +100,7 @@ CREATE TABLE `projetos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `tasks`
+-- Estrutura da tabela `tasks`
 --
 
 CREATE TABLE `tasks` (
@@ -116,7 +116,7 @@ CREATE TABLE `tasks` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuarios`
+-- Estrutura da tabela `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -129,13 +129,21 @@ CREATE TABLE `usuarios` (
   `nome` varchar(150) NOT NULL,
   `status` varchar(10) NOT NULL,
   `recebe_mail` int(11) DEFAULT NULL,
-  `cadastrado_em` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cadastrado_em` date DEFAULT NULL,
+  `ultimoacesso` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Extraindo dados da tabela `usuarios`
+--
+
+INSERT INTO `usuarios` (`id_usuario`, `id_empresa`, `id_projeto`, `id_perfil`, `login`, `senha`, `nome`, `status`, `recebe_mail`, `cadastrado_em`, `ultimoacesso`) VALUES
+(1, NULL, NULL, NULL, 'dreslei.g@umentor.com.br', 'MTIzNDU2', 'Administrador', 'Ativo', NULL, NULL, '2023-10-05 21:06:00');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `wiki_menu`
+-- Estrutura da tabela `wiki_menu`
 --
 
 CREATE TABLE `wiki_menu` (
@@ -149,7 +157,7 @@ CREATE TABLE `wiki_menu` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `wiki_submenu`
+-- Estrutura da tabela `wiki_submenu`
 --
 
 CREATE TABLE `wiki_submenu` (
@@ -167,40 +175,40 @@ CREATE TABLE `wiki_submenu` (
 --
 
 --
--- Índices de tabela `atendimento_bot`
+-- Índices para tabela `cadastros`
 --
-ALTER TABLE `atendimento_bot`
-  ADD PRIMARY KEY (`id_atend`);
+ALTER TABLE `cadastros`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `empresas`
+-- Índices para tabela `empresas`
 --
 ALTER TABLE `empresas`
   ADD PRIMARY KEY (`id_empresa`),
   ADD KEY `id_master` (`id_master`);
 
 --
--- Índices de tabela `perfil`
+-- Índices para tabela `perfil`
 --
 ALTER TABLE `perfil`
   ADD PRIMARY KEY (`id_perfil`);
 
 --
--- Índices de tabela `projetos`
+-- Índices para tabela `projetos`
 --
 ALTER TABLE `projetos`
   ADD PRIMARY KEY (`id_projeto`),
   ADD KEY `id_empresa` (`id_empresa`);
 
 --
--- Índices de tabela `tasks`
+-- Índices para tabela `tasks`
 --
 ALTER TABLE `tasks`
   ADD PRIMARY KEY (`id_task`),
   ADD KEY `id_empresa` (`id_empresa`);
 
 --
--- Índices de tabela `usuarios`
+-- Índices para tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`),
@@ -209,33 +217,33 @@ ALTER TABLE `usuarios`
   ADD KEY `id_empresa` (`id_empresa`);
 
 --
--- Índices de tabela `wiki_menu`
+-- Índices para tabela `wiki_menu`
 --
 ALTER TABLE `wiki_menu`
   ADD PRIMARY KEY (`id_menu`),
   ADD KEY `id_projeto` (`id_empresa`);
 
 --
--- Índices de tabela `wiki_submenu`
+-- Índices para tabela `wiki_submenu`
 --
 ALTER TABLE `wiki_submenu`
   ADD PRIMARY KEY (`id_submenu`);
 
 --
--- AUTO_INCREMENT para tabelas despejadas
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT de tabela `atendimento_bot`
+-- AUTO_INCREMENT de tabela `cadastros`
 --
-ALTER TABLE `atendimento_bot`
-  MODIFY `id_atend` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `cadastros`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `empresas`
 --
 ALTER TABLE `empresas`
-  MODIFY `id_empresa` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_empresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `perfil`
@@ -247,7 +255,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de tabela `projetos`
 --
 ALTER TABLE `projetos`
-  MODIFY `id_projeto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_projeto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `tasks`
@@ -259,7 +267,7 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `wiki_menu`
